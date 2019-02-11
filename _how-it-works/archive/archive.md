@@ -2,28 +2,6 @@
 title: Archive
 layout: default
 permalink: /archive/
-nav_items:
-  - name: introduction
-    title: Top
-  - name: ownership
-    title: Land ownership
-  - name: resources
-    title: Natural resources
-  - name: laws
-    title: Laws and regulations
-  - name: native-american-overview
-    title: Natural resources on Native American land
-  - name: process
-    title: Resources to revenue
-    subnav_items:
-      - name: production
-        title: Production
-      - name: revenues
-        title: Revenues
-      - name: disbursements
-        title: Disbursements  
-  - name: accounting
-    title: Accountability
 selector: list
 ---
 
@@ -31,7 +9,7 @@ selector: list
   <div class="container-page-wrapper landing-section_top ribbon ribbon-column">
     <div class="container-left-8 ribbon-hero ribbon-hero-column">
       <h1 id="introduction">Archive</h1>
-      <p class="ribbon-hero-description">The United States participated in the <a href="https://eiti.org/">Extractive Industries Transparency Initiative (EITI)</a> from 2011 to 2017. EITI is a voluntary, international standard that promotes open and accountable management of natural resources. This site was originally created to publish the USEITI annual report as interactive data and supporting information.</p>
+      <p class="ribbon-hero-description">The United States participated in the <a href="https://eiti.org/">Extractive Industries Transparency Initiative</a> (EITI) from 2011 to 2017. This site was originally created to publish the USEITI annual report as interactive data and supporting information.</p>
       <p class="ribbon-hero-description">In November 2017, the U.S. government decided to no longer formally implement the EITI Standard, but remains a strong supporter of the good governance and the principles of transparency represented by the EITI.</p>
     </div>
     <div class="container-right-4 ribbon-card-column ribbon-card">
@@ -40,7 +18,7 @@ selector: list
         <a href="https://eiti.org/"><img src="../public/img/logo-USEITI-color.svg" style="width: 90%;" alt="USEITI, United States Extractive Industries Transparency Initiative" /></a>
       </div>
       <div class="ribbon-card-bottom">
-        <p class="para-md">The archive has content that is no longer being maintained and updated.</p>
+        <p class="para-md">{% include svg/icon-archive.svg %} This archive is no longer being maintained and updated.</p>
       </div>
     </div>
   </div>
@@ -74,37 +52,33 @@ selector: list
   </section>
   
 
-<!-- Start here to create archive -->
+<!-- Archive sections start here -->
 
 
   <article class="container-left-8 container-shift-reverse-1">
     <section class="container">
-      <h2 id="ownership" class="h2-bar">Who owns natural resources in the U.S.?</h2>
+      <h2 id="ownership" class="h2-bar">Executive summaries</h2>
       <div class="container landing-section">
         <div>
-          <h3 class="h3 landing-heading"><a href="{{site.baseurl}}/how-it-works/ownership/">Ownership</a></h3>
-          <p>Private individuals and corporations, as well as federal, state, local, and Native American governments, can own land and the oil, gas, coal, and other minerals found below the surface.</p>
-          <p><a href="{{site.baseurl}}/how-it-works/ownership/">Learn about land and resource ownership</a></p>
+          <h3 class="h3 landing-heading"><a href="/about/report/">Executive summaries</a></h3>
+          <p>These reports outline progress made by the Department of the Interior and the Office of Natural Resources Revenue (ONRR) to enact the Extractive Industries Transparency Initiative (EITI). Reports are available for the years 2015, 2016, and 2017.</p>
+          <p><a href="/about/report/">Review the executive summaries</a></p>
         </div>
       </div>
     </section>
+<!--Left off here-->
     <section class="container">
-      <h2 id="resources" class="h2-bar">What natural resources are extracted in the U.S.?</h2>
+      <h2 id="resources" class="h2-bar">Audits and reconciliation</h2>
       <div class="container landing-section">
         <div>
-          <h3 class="h3 landing-heading"><a href="{{site.baseurl}}/how-it-works/fossil-fuels/">Fossil fuels</a></h3>
-          <p>Fossil fuels are our main source of electricity, and the primary fuel for powering motor vehicles and heating homes.</p>
-          <p><a href="{{site.baseurl}}/how-it-works/fossil-fuels/">Learn about oil, gas, and coal</a></p>
+          <h3 class="h3 landing-heading"><a href="/how-it-works/reconciliation/2016/">Reconciliation</a></h3>
+          <p>In the context of EITI, an Independent Administrator compares company reports of payments to government records of revenue received. We have reconciliation data for 2015 and 2016.</p>
+          <p><a href="/how-it-works/reconciliation/2016/">Review reconciliation data</a></p>
         </div>
         <div>
-          <h3 class="h3 landing-heading"><a href="{{site.baseurl}}/how-it-works/nonenergy-minerals/">Nonenergy minerals</a></h3>
-          <p>Nonenergy minerals include base and precious metals, industrial metals, and gemstones, among others.</p>
-          <p><a href="{{site.baseurl}}/how-it-works/nonenergy-minerals/">Learn about nonenergy minerals</a></p>
-        </div>
-        <div>
-          <h3 class="h3 landing-heading"><a href="{{site.baseurl}}/how-it-works/renewables/">Renewables</a></h3>
-          <p>Renewable energy comes from sources that are not depleted when used. These resources include geothermal, solar, wind, water, and biomass.</p>
-          <p><a href="{{site.baseurl}}/how-it-works/renewables/">Learn about renewable energy</a></p>
+          <h3 class="h3 landing-heading"><a href="/downloads/USEITI_budget-audit-factsheet_2017-08-09.pdf">Budget audit factsheet</a></h3>
+          <p>This PDF document highlights processes for tracking payments from companies to U.S. government agencies during USEITI.</p>
+          <p><a href="/downloads/USEITI_budget-audit-factsheet_2017-08-09.pdf">Review the factsheet (PDF)</a></p>
         </div>
       </div>
     </section>
