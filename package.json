@@ -41,7 +41,7 @@
 		"lint-js": "eslint --ignore-path .eslintignore js",
 		"lint-ruby": "bundle exec rubocop -c .rubocop.yml _plugins/eiti_*.rb",
 		"lint-scss": "bundle exec scss-lint -c .scss-lint.yml || echo '(there were SCSS linting errors)'",
-		"amir": "test"
+		"amir": "test2"
 	},
 	"dependencies": {
 		"@frctl/fractal": "^1.1.7",
