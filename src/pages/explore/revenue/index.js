@@ -416,12 +416,12 @@ class FederalRevenue extends React.Component {
 						<TableToolbar 
 							fiscalYearOptions={this.getFiscalYearOptions()}
 							locationOptions={this.getLocationOptions()}
-							defaultFiscalYearsSelected={this.state.filter.years}
+							defaultFiscalYearStartSelected={'2018'}
 							onSubmitAction={this.handleTableToolbarSubmit.bind(this)}
 						/>
 					}
 
-					{this.state[REVENUES_FISCAL_YEAR] &&
+					{this.noop &&
 						<div className={styles.tableContainer}>
 							<GroupTable 
 								rows={tableData}
@@ -474,9 +474,9 @@ const muiTheme = createMuiTheme({
     }
   },
 });
-const TableToolbar = ({ fiscalYearOptions, locationOptions, defaultFiscalYearsSelected, onSubmitAction }) => {
+const TableToolbar = ({ fiscalYearOptions, locationOptions, defaultFiscalYearStartSelected, onSubmitAction }) => {
 
-	const [fiscalYearsSelected, setFiscalYearsSelected] = useState(defaultFiscalYearsSelected);
+	const [fiscalYearStartSelected, setFiscalYearStartSelected] = useState(defaultFiscalYearStartSelected);
 	const [landCategorySelected, setLandCategorySelected] = useState('All');
 	const [locationSelected, setLocationSelected] = useState('All');
 	const [groupBy, setGroupBy] = useState(Object.keys(GROUP_BY_OPTIONS)[DEFAULT_GROUP_BY_INDEX]);
@@ -534,14 +534,12 @@ const TableToolbar = ({ fiscalYearOptions, locationOptions, defaultFiscalYearsSe
 	  	<MuiThemeProvider theme={muiTheme}>
 		    <Grid container spacing={16}>
 					<Grid item sm={3} xs={12}>
-						<h6>Fiscal year(s):</h6>
-						<Select
-							multiple
-							dataSetId={REVENUES_FISCAL_YEAR}
+						<h6>Fiscal year start:</h6>
+						<DropDown
 					    options={fiscalYearOptions}
 					    sortType={'descending'}
-					    selectedOption={fiscalYearsSelected}
-							onChangeHandler={(values) => setFiscalYearsSelected(values)}
+					    selectedOptionValue={fiscalYearStartSelected}
+							action={(values) => setFiscalYearStartSelected(values)}
 					  />
 				  </Grid>
 					<Grid item sm xs={12}>
