@@ -33,6 +33,7 @@ import Toggle from '../../../components/selectors/Toggle'
 import DropDown from '../../../components/selectors/DropDown'
 import Select from '../../../components/selectors/Select'
 import FilterTable from '../../../components/tables/FilterTable'
+import RowspanTable from '../../../components/tables/RowspanTable'
 import GroupTable from '../../../components/tables/GroupTable'
 import TreeTable from '../../../components/tables/TreeTable'
 import GlossaryTerm from '../../../components/utils/glossary-term.js';
@@ -80,7 +81,7 @@ class FederalRevenue extends React.Component {
 	constructor(props) {
 		super(props);
 		this.additionalColumnOptionKeys = Object.keys(ADDITIONAL_COLUMN_OPTIONS);
-		this.getFiscalYearOptions = () => this.props[REVENUES_FISCAL_YEAR] && Object.keys(this.props[REVENUES_FISCAL_YEAR][BY_FISCAL_YEAR]);
+		this.getFiscalYearOptions = () => this.props[REVENUES_FISCAL_YEAR] && Object.keys(this.props[REVENUES_FISCAL_YEAR][BY_FISCAL_YEAR]).map(year => parseInt(year));
 		this.getLocationOptions = () => {
 			let allOption = ['All']
 			let offshoreOptions = this.props[REVENUES_FISCAL_YEAR] && Object.keys(this.props[REVENUES_FISCAL_YEAR][BY_OFFSHORE_REGION])
@@ -103,7 +104,7 @@ class FederalRevenue extends React.Component {
 	componentWillReceiveProps (nextProps) {
 		let yearOptions = Object.keys(nextProps[REVENUES_FISCAL_YEAR][BY_FISCAL_YEAR]);
 		let additionalColumns = nextProps.additionalColumns || this.state.additionalColumns;
-		let filter = {...this.state.filter, years:(nextProps.selectedYears || yearOptions.slice(Math.max(yearOptions.length - 3, 1))) }
+		let filter = {...this.state.filter, years:(nextProps.selectedYears || [Math.max(...yearOptions)] ) }
 
 	  this.setState({ ...nextProps, 
 	  	filter: filter, 
@@ -194,7 +195,7 @@ class FederalRevenue extends React.Component {
 					let data = dataSet[BY_ID][dataId];
 
 					// Apply filters
-					if(this.state.filter.years.includes(data.FiscalYear) &&
+					if(this.state.filter.years.includes(parseInt(data.FiscalYear)) &&
 						this.hasLandCategory(data) &&
 						this.hasLocation(data)) {
 
@@ -321,11 +322,9 @@ class FederalRevenue extends React.Component {
 		this.setState({
 			filter:{...this.state.filter, 
 				years:updatedFilters.fiscalYearsSelected.sort(),
-				groupBy: updatedFilters.groupBy,
 				landCategory: updatedFilters.landCategorySelected,
 				location: updatedFilters.locationSelected,
 			}, 
-			additionalColumns: secondColumn,
 		})
 	}
   /**
@@ -378,6 +377,8 @@ class FederalRevenue extends React.Component {
 		let {totalSummaryItems, groupSummaryItems} = this.getTableSummaries();
 		let {tableData, expandedGroups} = this.getTableData();
 
+		//console.log(tableData)
+
 		return (
 			<DefaultLayout>
 	      <Helmet
@@ -416,14 +417,14 @@ class FederalRevenue extends React.Component {
 						<TableToolbar 
 							fiscalYearOptions={this.getFiscalYearOptions()}
 							locationOptions={this.getLocationOptions()}
-							defaultFiscalYearStartSelected={'2018'}
+							defaultFiscalYearStartSelected={Math.max(this.state.years)}
 							onSubmitAction={this.handleTableToolbarSubmit.bind(this)}
 						/>
 					}
 
-					{this.noop &&
+					{tableData &&
 						<div className={styles.tableContainer}>
-							<GroupTable 
+							<RowspanTable 
 								rows={tableData}
 								columns={columns} 
 								defaultSorting={defaultSorting}
@@ -475,12 +476,10 @@ const muiTheme = createMuiTheme({
   },
 });
 const TableToolbar = ({ fiscalYearOptions, locationOptions, defaultFiscalYearStartSelected, onSubmitAction }) => {
-
-	const [fiscalYearStartSelected, setFiscalYearStartSelected] = useState(defaultFiscalYearStartSelected);
+	const [fiscalYearStartSelected, setFiscalYearStartSelected] = useState(defaultFiscalYearStartSelected || Math.max(...fiscalYearOptions));
+	const [fiscalYearEndSelected, setFiscalYearEndSelected] = useState(fiscalYearStartSelected);
 	const [landCategorySelected, setLandCategorySelected] = useState('All');
 	const [locationSelected, setLocationSelected] = useState('All');
-	const [groupBy, setGroupBy] = useState(Object.keys(GROUP_BY_OPTIONS)[DEFAULT_GROUP_BY_INDEX]);
-	const [additionalColumn, setAdditionalColumn] = useState(Object.keys(ADDITIONAL_COLUMN_OPTIONS)[DEFAULT_ADDITIONAL_COLUMN_INDEX]);
 
 	const getAdditionalColumnOptions = () => Object.keys(ADDITIONAL_COLUMN_OPTIONS).filter(column => column !== groupBy);
 	const getLocationOptions = () => {
@@ -501,6 +500,9 @@ const TableToolbar = ({ fiscalYearOptions, locationOptions, defaultFiscalYearSta
 		}
 		return locationOptions;
 	}
+	const getFiscalYearEndOptions = () => {
+		return utils.range(fiscalYearStartSelected, Math.max(...fiscalYearOptions));
+	}
 
 	let showLocationMessage = () => {
 		let validLandCategories = ['All', 'All onshore', 'Native American']
@@ -508,23 +510,20 @@ const TableToolbar = ({ fiscalYearOptions, locationOptions, defaultFiscalYearSta
 	}
 
 	useEffect(() => {
-		if(additionalColumn === groupBy) {
-			setAdditionalColumn('No second column')
-		}
-
 		if(!getLocationOptions().includes(locationSelected)){
 			setLocationSelected( ((landCategorySelected === 'Native American')? 'withheld': 'All') )
 		}
+
+		setFiscalYearStartSelected(parseInt(fiscalYearStartSelected))
+		setFiscalYearEndSelected(parseInt(fiscalYearEndSelected))
 	})
 
 	const handleApply = () => {
 		if(onSubmitAction){
 			onSubmitAction({
-				fiscalYearsSelected: fiscalYearsSelected,
+				fiscalYearsSelected: utils.range(fiscalYearStartSelected, fiscalYearEndSelected),
 				landCategorySelected: landCategorySelected,
 				locationSelected: locationSelected,
-				groupBy: groupBy,
-				additionalColumn: additionalColumn,
 			});
 		}
 	}
@@ -533,13 +532,22 @@ const TableToolbar = ({ fiscalYearOptions, locationOptions, defaultFiscalYearSta
   	<div className={styles.tableToolbarContainer}>
 	  	<MuiThemeProvider theme={muiTheme}>
 		    <Grid container spacing={16}>
-					<Grid item sm={3} xs={12}>
+					<Grid item sm xs={12}>
 						<h6>Fiscal year start:</h6>
 						<DropDown
 					    options={fiscalYearOptions}
 					    sortType={'descending'}
 					    selectedOptionValue={fiscalYearStartSelected}
 							action={(values) => setFiscalYearStartSelected(values)}
+					  />
+				  </Grid>
+					<Grid item sm xs={12}>
+						<h6>Fiscal year end:</h6>
+						<DropDown
+					    options={getFiscalYearEndOptions()}
+					    sortType={'descending'}
+					    selectedOptionValue={fiscalYearEndSelected}
+							action={(values) => setFiscalYearEndSelected(values)}
 					  />
 				  </Grid>
 					<Grid item sm xs={12}>
@@ -562,32 +570,13 @@ const TableToolbar = ({ fiscalYearOptions, locationOptions, defaultFiscalYearSta
 					  	<LocationMessage />
 					  }
 				  </Grid>
-					<Grid item sm xs={12}>
-						<h6>Group by:</h6>
-						<DropDown
-							sortType={'none'}
-					    options={Object.keys(GROUP_BY_OPTIONS)}
-					    action={(value) => setGroupBy(value)}
-					    defaultOptionValue={groupBy}
-					    sortType={'none'}
-					  />
-				  </Grid>
-					<Grid item sm xs={12}>
-						<h6>Additional column:</h6>
-						<DropDown
-							sortType={'none'}
-					    options={getAdditionalColumnOptions()}
-					    action={(value) => setAdditionalColumn(value)}
-					    selectedOptionValue={additionalColumn}
-					  />
-				  </Grid>
 					<Grid item xs={12} >
 			 			<Button classes={{root:styles.tableToolbarButton}} variant="contained" color="primary" onClick={() => handleApply()}>Apply</Button>
 			 		</Grid>
 		    </Grid>
 		    <Grid container spacing={0}>
 					<Grid item xs={12} >
-			 			<h5 style={{margin:'0px'}}>Grouped by: {groupBy}</h5>
+			 			<h5 style={{margin:'0px'}}>Grouped by: </h5>
 			 		</Grid>
 		    </Grid>
 	    </MuiThemeProvider>
