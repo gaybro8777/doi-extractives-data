@@ -98,7 +98,8 @@ class FederalRevenue extends React.Component {
 			groupBy: Object.keys(GROUP_BY_OPTIONS)[DEFAULT_GROUP_BY_INDEX],
 			years: []
 		},
-		additionalColumns: [Object.keys(GROUP_BY_OPTIONS)[DEFAULT_ADDITIONAL_COLUMN_INDEX]]
+		additionalColumns: [Object.keys(GROUP_BY_OPTIONS)[DEFAULT_ADDITIONAL_COLUMN_INDEX]],
+		userAppliedFilter: false,
 	}
 
 	componentWillReceiveProps (nextProps) {
@@ -123,13 +124,14 @@ class FederalRevenue extends React.Component {
 		}
 
 		this.state.additionalColumns.forEach(column => {
-			columns.push({ name: utils.formatToSlug(column), title: column, plural: PLURAL_COLUMNS_MAP[column] })
+			let slug = utils.formatToSlug(column);
+			columns.push({ name: slug, title: column, plural: PLURAL_COLUMNS_MAP[column] })
 		})
 
 		let allColumns = Object.keys(ADDITIONAL_COLUMN_OPTIONS).map(columnName => utils.formatToSlug(columnName))
 
 		filter.years.sort().forEach(year => {
-			columns.push({ name: 'fy-'+year, title: year })
+			columns.push({ name: 'fy-'+year, title: year, numeric: true })
 			columnExtensions.push({ columnName: 'fy-'+year, align: 'right' })
 			defaultSorting=[{ columnName: 'fy-'+year, direction: 'desc' }]
 		})
@@ -320,6 +322,7 @@ class FederalRevenue extends React.Component {
 	handleTableToolbarSubmit(updatedFilters) {
 		let secondColumn = (updatedFilters.additionalColumn === 'No second column')? [] : [updatedFilters.additionalColumn];
 		this.setState({
+			userAppliedFilter: true,
 			filter:{...this.state.filter, 
 				years:updatedFilters.fiscalYearsSelected.sort(),
 				landCategory: updatedFilters.landCategorySelected,
@@ -372,12 +375,12 @@ class FederalRevenue extends React.Component {
   }
 
 	render() {
-		let {timeframe, yearOptions} = this.state;
-		let {columns, columnExtensions, grouping, currencyColumns, allColumns, defaultSorting} = this.getTableColumns();
-		let {totalSummaryItems, groupSummaryItems} = this.getTableSummaries();
-		let {tableData, expandedGroups} = this.getTableData();
-
-		//console.log(tableData)
+		let {timeframe, yearOptions, userAppliedFilter} = this.state;
+		if(userAppliedFilter) {
+			var {columns, columnExtensions, grouping, currencyColumns, allColumns, defaultSorting} = this.getTableColumns();
+			var {totalSummaryItems, groupSummaryItems} = this.getTableSummaries();
+			var {tableData, expandedGroups} = this.getTableData();
+		}
 
 		return (
 			<DefaultLayout>
@@ -413,7 +416,7 @@ class FederalRevenue extends React.Component {
 
 					<h2 className={theme.sectionHeaderUnderline}>Revenue data</h2>
 
-					{tableData &&
+					{this.props[REVENUES_FISCAL_YEAR] &&
 						<TableToolbar 
 							fiscalYearOptions={this.getFiscalYearOptions()}
 							locationOptions={this.getLocationOptions()}
@@ -572,11 +575,6 @@ const TableToolbar = ({ fiscalYearOptions, locationOptions, defaultFiscalYearSta
 				  </Grid>
 					<Grid item xs={12} >
 			 			<Button classes={{root:styles.tableToolbarButton}} variant="contained" color="primary" onClick={() => handleApply()}>Apply</Button>
-			 		</Grid>
-		    </Grid>
-		    <Grid container spacing={0}>
-					<Grid item xs={12} >
-			 			<h5 style={{margin:'0px'}}>Grouped by: </h5>
 			 		</Grid>
 		    </Grid>
 	    </MuiThemeProvider>

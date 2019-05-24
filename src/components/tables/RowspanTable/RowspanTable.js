@@ -29,12 +29,12 @@ const RowspanTable = props => {
   }
 
   const getTableRows = () => {
-
+    let total = 0;
     
     if(props.grouping) {
       let groupColumnKey = props.grouping[0].columnName;
       let test = groupArray(props.rows, groupColumnKey, 'commodity')
-      console.log(test)
+      //console.log(test)
       let result = props.rows.reduce((h, obj) => { console.log(groupColumnKey); return Object.assign(h, { [obj[groupColumnKey]]:( h[obj[groupColumnKey]] || [] ).concat(obj) }) }, {}) 
       let groups = Object.keys(result);
       let groupAdded = []
@@ -44,12 +44,13 @@ const RowspanTable = props => {
           <TableRow_MU key={groupRowIndex}>
             {
               Object.keys(row).map((cellKey, i) => {
+                let value = (cellKey.includes('fy'))? utils.formatToDollarInt(row[cellKey]) : row[cellKey];
                 if(groups.includes(row[cellKey]) && !groupAdded.includes(row[cellKey])) {
                   groupAdded.push(row[cellKey]);
-                  return (<TableCell_MU key={i} rowSpan={result[group].length} className={styles.rowspanCell}>{row[cellKey]}</TableCell_MU>)
+                  return (<TableCell_MU key={i} align={cellKey.includes('fy') ? 'right' : 'left'} rowSpan={result[group].length} className={styles.rowspanCell}>{value}</TableCell_MU>)
                 }
                 else if(!groups.includes(row[cellKey])) {
-                  return <TableCell_MU key={i}>{row[cellKey]}</TableCell_MU>
+                  return <TableCell_MU key={i} align={cellKey.includes('fy') ? 'right' : 'left'} >{value}</TableCell_MU>
                 }
               })
             }
@@ -64,7 +65,8 @@ const RowspanTable = props => {
           <TableRow_MU key={index}>
             { 
               Object.keys(row).map((cellKey, index) => {
-                return (<TableCell_MU key={index}>{row[cellKey]}</TableCell_MU>)
+                let value = (cellKey.includes('fy'))? utils.formatToDollarInt(row[cellKey]) : row[cellKey];
+                return (<TableCell_MU key={index} align={cellKey.includes('fy') ? 'right' : 'left'} >{value}</TableCell_MU>)
               })
             }
           </TableRow_MU>
@@ -78,6 +80,10 @@ const RowspanTable = props => {
   return (
 		<div className={styles.root}>
       <Table_MU className={styles.table}>
+        <EnhancedTableHead
+          onRequestSort={handleRequestSort}
+          columns={props.columns}
+        />
         <TableBody_MU className={styles.tableBody}>
           {props.rows && getTableRows()}
         </TableBody_MU>
@@ -97,14 +103,13 @@ class EnhancedTableHead extends React.Component {
 
   render() {
     const { columns } = this.props;
-
     return (
       <TableHead_MU className={styles.tableHeader}>
         <TableRow_MU>
           {columns.map(
             (column, index) => (
               <TableCell_MU
-                key={column.id+"_"+index}
+                key={column.name+"_"+index}
                 align={column.numeric ? 'right' : 'left'}
                 padding={column.disablePadding ? 'none' : 'default'}
               >
@@ -116,7 +121,7 @@ class EnhancedTableHead extends React.Component {
                   <TableSortLabel_MU
                     onClick={this.createSortHandler(column.id)}
                   >
-                    {column.label}
+                    {column.title}
                   </TableSortLabel_MU>
                 </Tooltip_MU>
               </TableCell_MU>
