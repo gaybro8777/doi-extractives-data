@@ -122,6 +122,8 @@
   definition: "The Office of Surface Mining Reclamation and Enforcement (OSMRE) is part of the U.S. Department of the Interior, and is responsible for regulating surface coal mining in the United States, as well as funding the restoration of abandoned coal mines."
 - name: "OST"
   definition: "The Office of the Special Trustee for American Indians (OST) is part of the Department of the Interior and is responsible for stewardship of assets held in trust on behalf of American Indians."
+- name: "Other revenue"
+  definition: "Revenue that is not included in the royalty, rent, or bonus categories, such as minimum royalties, estimated royalties, settlement agreements, interest, civil penalties, and inspection fees."  
 - name: "Paying quantities"
   definition: "Quantities of oil or gas that are sufficient to yield a profit to the lease holder over operating expenses, even though the drilling costs or equipping costs are never recovered, and even if the undertaking as a whole may result in a loss to the lease holder."
 - name: "Petroleum products"

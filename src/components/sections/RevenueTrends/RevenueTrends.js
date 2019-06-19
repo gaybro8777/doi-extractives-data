@@ -4,6 +4,7 @@ import { StaticQuery, graphql } from "gatsby"
 
 import * as d3 from 'd3'
 import utils from '../../../js/utils'
+import GlossaryTerm from '../../utils/glossary-term.js'
 
 import Sparkline from '../../data-viz/Sparkline'
 
@@ -104,7 +105,7 @@ const RevenueTrends = props => (
             </thead>
             <tbody>
               <tr>
-                <td>Royalties</td>
+                <td><GlossaryTerm termKey="Royalty">Royalties</GlossaryTerm></td>
                 <td className={styles.alignRight}>{utils.formatToSigFig_Dollar(currentYearData.amountByRevenueType.Royalties, 3)}</td>
               </tr>
               <tr>
@@ -117,7 +118,7 @@ const RevenueTrends = props => (
                 </td>
               </tr>
               <tr>
-                <td>Bonuses</td>
+                <td><GlossaryTerm termKey="Bonus">Bonuses</GlossaryTerm></td>
                 <td className={styles.alignRight}>{utils.formatToSigFig_Dollar(currentYearData.amountByRevenueType.Bonus, 3)}</td>
               </tr>
               <tr>
@@ -130,7 +131,7 @@ const RevenueTrends = props => (
                 </td>
               </tr>
               <tr>
-                <td>Rents</td>
+                <td><GlossaryTerm>Rent</GlossaryTerm></td>
                 <td className={styles.alignRight}>{utils.formatToSigFig_Dollar(currentYearData.amountByRevenueType.Rents, 3)}</td>
               </tr>
               <tr>
@@ -143,7 +144,7 @@ const RevenueTrends = props => (
                 </td>
               </tr>
               <tr>
-                <td>Other revenues</td>
+                <td><GlossaryTerm>Other revenue</GlossaryTerm></td>
                 <td className={styles.alignRight}>{utils.formatToSigFig_Dollar(currentYearData.amountByRevenueType['Other Revenues'], 3)}</td>
               </tr>
               <tr>
@@ -156,7 +157,7 @@ const RevenueTrends = props => (
                 </td>
               </tr>
               <tr>
-                <td><strong>Total revenues</strong></td>
+                <td><strong>Total revenue</strong></td>
                 <td className={styles.alignRight}><strong>{utils.formatToSigFig_Dollar(currentYearTotal, 3)}</strong></td>
               </tr>
               <tr>
