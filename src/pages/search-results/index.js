@@ -56,7 +56,7 @@ const SearchResults = () => {
                     results.map((item, index) => {
                       return <li key={ index }><Link to={ item.path }>{ item.title }</Link></li>
                     }
-                    ) : <p><strong>We didn't find any results for {queryString}.</strong> You might want to try searching for <GlossaryTerm termKey={queryString}>{queryString}</GlossaryTerm> in our glossary.</p>
+                    ) : <p><strong>We didn't find any search results for {queryString}.</strong> You might want to try searching for <GlossaryTerm termKey={queryString}>{queryString}</GlossaryTerm> in our glossary.</p>
                   }
                 </ul>
               </article>  
