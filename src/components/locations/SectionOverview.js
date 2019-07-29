@@ -116,10 +116,10 @@ const SectionOwnership = props => {
             style={{ 'paddingBottom': '235.85px' }}>
             <svg className="county ownership map state-page" viewBox={viewBox}>
               <g className="states features">
-                {getNeighbors_Features()}
+                <use xlinkHref={getNeighbors_Features()}></use>
               </g>
               <g className="states mesh">
-                {getNeighbors_Mesh()}
+                <use xlinkHref={getNeighbors_Mesh()}></use>
               </g>
               <g className="counties features">
                 <use xlinkHref={usStateSVG + '#counties'}></use>
