@@ -1,4 +1,1 @@
-<svg width="25" height="20"  style="fill:black; vertical-align:text-bottom">
-	<title id="up-arrow" lang="en">Increase</title>
-	<polygon points="12.5,0 0,20 25,20" />
-</svg>
+<svg style="vertical-align:text-bottom" width="25" height="20" fill="#000"><title id="up-arrow" lang="en">Increase</title><polygon points="12.5 0 0 20 25 20"/></svg>
